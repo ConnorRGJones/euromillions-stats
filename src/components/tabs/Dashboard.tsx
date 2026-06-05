@@ -18,7 +18,8 @@ const kpis = [
   { label: "Coldest Ball", value: cold.n, sub: `drawn ${cold.c}×` },
 ];
 
-const recent = draws.slice(0, 5);
+function toTs(s: string) { const [d,m,y] = s.split("-").map(Number); return new Date(y,m-1,d).getTime(); }
+const recent = [...draws].sort((a,b) => toTs(b[0]) - toTs(a[0])).slice(0, 5);
 const top10 = mainSorted.slice(0, 10);
 const top6stars = starSorted.slice(0, 6);
 
@@ -45,10 +46,10 @@ export default function Dashboard() {
       </div>
 
       {/* KPI strip */}
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-6">
-        {kpis.map((k) => (
-          <div key={k.label} className="card p-4">
-            <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "#6a6a6a" }}>{k.label}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+        {kpis.map((k, i) => (
+          <div key={k.label} className={`card p-4${i === kpis.length - 1 ? " col-span-2 sm:col-span-1" : ""}`}>
+            <p className="text-xs font-semibold uppercase tracking-wide mb-1 whitespace-nowrap" style={{ color: "#6a6a6a" }}>{k.label}</p>
             <p className="text-2xl font-bold" style={{ color: "#2563eb" }}>{k.value}</p>
             <p className="text-xs mt-0.5" style={{ color: "#6a6a6a" }}>{k.sub}</p>
           </div>
@@ -60,16 +61,18 @@ export default function Dashboard() {
         <CardTitle badge="last 5">Recent Draws</CardTitle>
         <div className="space-y-3">
           {recent.map((d) => (
-            <div key={d[0]} className="flex items-center gap-3 flex-wrap">
-              <span className="text-xs w-24 shrink-0" style={{ color: "#9a9a9a" }}>
+            <div key={d[0]} className="space-y-1">
+              <span className="text-xs block" style={{ color: "#9a9a9a" }}>
                 {parseDate(d[0]).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "2-digit" })}
               </span>
-              <div className="flex gap-1.5">
-                {d[1].map((n) => <Ball key={n} n={n} size="sm" />)}
-              </div>
-              <span className="text-sm" style={{ color: "#3a3a3a" }}>★</span>
-              <div className="flex gap-1.5">
-                {d[2].map((s) => <Ball key={s} n={s} type="star" size="sm" />)}
+              <div className="flex items-center gap-1 flex-wrap">
+                <div className="flex gap-1">
+                  {d[1].map((n) => <Ball key={n} n={n} size="sm" />)}
+                </div>
+                <span className="text-xs mx-0.5" style={{ color: "#3a3a3a" }}>★</span>
+                <div className="flex gap-1">
+                  {d[2].map((s) => <Ball key={s} n={s} type="star" size="sm" />)}
+                </div>
               </div>
             </div>
           ))}
