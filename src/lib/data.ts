@@ -1,4 +1,4 @@
-// 439 EuroMillions draws — Jan 2022 to Jun 2026
+// 440 EuroMillions draws — Jan 2022 to Jun 2026
 // Format: [date, [b1,b2,b3,b4,b5], [s1,s2]]
 export type Draw = [string, [number, number, number, number, number], [number, number]];
 
@@ -229,4 +229,5 @@ export const draws: Draw[] = [
   ["07-07-2026",[5,29,33,45,47],[5,8]],
   ["10-07-2026",[2,14,28,33,48],[8,10]],
   ["14-07-2026",[10,19,37,42,47],[9,12]],
+  ["17-07-2026",[12,21,23,34,40],[9,10]],
 ];
